@@ -1,4 +1,4 @@
-import { Resume } from "./../types/resume.types";
+import { Resume } from "../types/resume.type";
 import mongoose from "mongoose";
 
 const resumeSchema = new mongoose.Schema<Resume>({
