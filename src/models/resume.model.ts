@@ -1,75 +1,94 @@
 import { Resume } from "../types/resume.type";
 import mongoose from "mongoose";
 
-const resumeSchema = new mongoose.Schema<Resume>({
-  userId: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  profileImg: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  introduction: {
-    type: String,
-    required: true,
-  },
-  urls: [
-    {
-      type: String,
+const resumeSchema = new mongoose.Schema<Resume>(
+  {
+    userId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
     },
-  ],
-  pdfs: [
-    {
+    profileImg: {
       type: String,
+      required: true,
     },
-  ],
-  status: {
-    type: String,
-    enum: ["temporary", "completed"],
-  },
-  options: {
-    type: String,
-    enum: [
-      "career",
-      "acttivity",
-      "certification",
-      "education",
-      "techStack",
-      "project",
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    introduction: {
+      type: String,
+      required: true,
+    },
+    urls: [
+      {
+        type: String,
+      },
     ],
-    contents: {
-      career: [
-        {
-          name: {
-            type: String,
-          },
-          position: {
-            type: String,
-          },
-          part: {
-            type: String,
-          },
-          duration: {
-            type: String,
-          },
-          detail: {
-            type: String,
-          },
-        },
+    pdfs: [
+      {
+        type: String,
+      },
+    ],
+    status: {
+      type: String,
+      enum: ["temporary", "completed"],
+    },
+    options: {
+      type: String,
+      enum: [
+        "career",
+        "acttivity",
+        "certification",
+        "education",
+        "techStack",
+        "project",
       ],
-      activity: [
-        {
+      contents: {
+        career: [
+          {
+            name: {
+              type: String,
+            },
+            position: {
+              type: String,
+            },
+            part: {
+              type: String,
+            },
+            duration: {
+              type: String,
+            },
+            detail: {
+              type: String,
+            },
+          },
+        ],
+        activity: [
+          {
+            name: {
+              type: String,
+            },
+            organization: {
+              type: String,
+            },
+            duration: {
+              type: String,
+            },
+            detail: {
+              type: String,
+            },
+          },
+        ],
+        certification: {
           name: {
+            type: String,
+          },
+          level: {
             type: String,
           },
           organization: {
@@ -78,88 +97,76 @@ const resumeSchema = new mongoose.Schema<Resume>({
           duration: {
             type: String,
           },
-          detail: {
-            type: String,
-          },
         },
-      ],
-      certification: {
-        name: {
-          type: String,
-        },
-        level: {
-          type: String,
-        },
-        organization: {
-          type: String,
-        },
-        duration: {
-          type: String,
-        },
-      },
-      language: {
-        kind: {
-          type: String,
-          enum: ["engilish", "japanese", "chinese"],
-        },
-        level: {
-          type: String,
-          enum: ["daily", "business", "native"],
-        },
-      },
-      education: [
-        {
+        language: {
           kind: {
             type: String,
-            enum: [
-              "private",
-              "high",
-              "associate",
-              "bachelor",
-              "master",
-              "doctor",
-            ],
+            enum: ["engilish", "japanese", "chinese"],
           },
-          organization: {
+          level: {
             type: String,
-          },
-          major: {
-            type: String,
-          },
-          status: {
-            type: String,
-            enum: ["graduation", "attending", "completion"],
-          },
-          duration: {
-            type: String,
+            enum: ["daily", "business", "native"],
           },
         },
-      ],
-      techStack: [
-        {
-          type: [String],
-        },
-      ],
-      project: [
-        {
-          name: {
-            type: String,
+        education: [
+          {
+            kind: {
+              type: String,
+              enum: [
+                "private",
+                "high",
+                "associate",
+                "bachelor",
+                "master",
+                "doctor",
+              ],
+            },
+            organization: {
+              type: String,
+            },
+            major: {
+              type: String,
+            },
+            status: {
+              type: String,
+              enum: ["graduation", "attending", "completion"],
+            },
+            duration: {
+              type: String,
+            },
           },
-          organization: {
-            type: String,
+        ],
+        techStack: [
+          {
+            type: [String],
           },
-          duration: {
-            type: String,
+        ],
+        project: [
+          {
+            name: {
+              type: String,
+            },
+            organization: {
+              type: String,
+            },
+            duration: {
+              type: String,
+            },
+            detail: {
+              type: String,
+            },
           },
-          detail: {
-            type: String,
-          },
-        },
-      ],
+        ],
+      },
     },
   },
-});
+  {
+    timestamps: {
+      currentTime: () => new Date(new Date().getTime() + 9 * 60 * 60 * 1000), // KST
+    },
+  }
+);
 
-const Resume = mongoose.model("Resume", resumeSchema);
+const ResumeModel = mongoose.model<Resume>("Resume", resumeSchema);
 
-export default Resume;
+export default ResumeModel;

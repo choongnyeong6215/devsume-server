@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { User } from "../types/user.type.ts";
+import { User } from "../types/user.type";
 
 const userSchema = new mongoose.Schema<User>(
   {
@@ -22,10 +22,12 @@ const userSchema = new mongoose.Schema<User>(
   },
   // 프로필 수정 고려
   {
-    timestamps: true,
+    timestamps: {
+      currentTime: () => new Date(new Date().getTime() + 9 * 60 * 60 * 1000), // KST
+    },
   }
 );
 
-const User = mongoose.model("User", userSchema);
+const UserModel = mongoose.connection.model<User>("User", userSchema);
 
-export default User;
+export default UserModel;
