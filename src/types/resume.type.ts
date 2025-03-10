@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { ObjectId } from "mongoose";
 
 enum ResumeStatus {
   TEMPORARY = "temporary",
@@ -95,8 +95,9 @@ interface Contents {
   project: Project[];
 }
 
-export interface Resume {
-  userId: Types.ObjectId;
+export interface Resume extends Document {
+  _id: ObjectId;
+  userId: ObjectId;
   profileImg: string;
   name: string;
   email: string;
@@ -106,4 +107,7 @@ export interface Resume {
   status: ResumeStatus;
   options: Options;
   contents: Contents;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
 }
