@@ -41,4 +41,12 @@ const localLogin = async (
   });
 };
 
-export { localJoin, localLogin };
+const kakaoLogin = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
+  console.log(req.user);
+  res.json(req.user);
+};
+
+export { localJoin, localLogin, kakaoLogin };

@@ -33,4 +33,26 @@ const validateUser = async (
   return null;
 };
 
-export { registerUser, validateUser };
+const validateKakao = async (userId: string): Promise<User | null> => {
+  const user = await UserModel.findOne({ oauthId: userId });
+
+  console.log("user : ", user);
+
+  if (user) {
+    return user;
+  }
+
+  return null;
+};
+
+const registerKakao = async (userId: number, email?: string): Promise<User> => {
+  const newUser = new UserModel({
+    oauthId: userId,
+    email,
+    provider: "kakao",
+  });
+
+  return newUser.save();
+};
+
+export { registerUser, validateUser, validateKakao, registerKakao };
