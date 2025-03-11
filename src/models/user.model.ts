@@ -3,8 +3,12 @@ import { User } from "../types/user.type";
 
 const userSchema = new mongoose.Schema<User>(
   {
+    oauthId: {
+      type: Number || null,
+      unique: true,
+    },
     email: {
-      type: String,
+      type: String || null,
       required: true,
       unique: true,
     },
