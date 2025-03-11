@@ -4,6 +4,7 @@ type Provider = "local" | "kakao";
 
 export interface User extends Document {
   _id: ObjectId;
+  oauthId: number | null;
   email: string;
   password?: string;
   provider: Provider;
