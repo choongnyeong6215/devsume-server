@@ -12,3 +12,8 @@ export interface User extends Document {
   updatedAt: Date;
   __v: number;
 }
+
+export interface Token {
+  accessToken: string;
+  refreshToken: string;
+}
