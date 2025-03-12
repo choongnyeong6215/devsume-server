@@ -65,5 +65,6 @@ router.get(
   },
   kakaoLogin
 );
+router.delete("/local/token");
 
 export default router;
