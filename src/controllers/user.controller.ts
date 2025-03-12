@@ -1,7 +1,6 @@
 import * as express from "express";
 import { registerUser } from "../services/user.service.ts";
-import { generateToken } from "../middleware/auth.middleware.ts";
-import { User } from "../types/user.type.ts";
+import { Token, User } from "../types/user.type.ts";
 
 const localJoin = async (
   req: express.Request,
@@ -28,16 +27,11 @@ const localLogin = async (
   req: express.Request,
   res: express.Response
 ): Promise<void> => {
-  const user = req.user as User;
-
-  const { accessToken, refreshToken } = await generateToken(
-    user._id.toString(),
-    user.email
-  );
+  const user = req.user as User & Token;
 
   res.json({
-    access_token: accessToken,
-    refresh_token: refreshToken,
+    accessToken: user.accessToken,
+    refreshToken: user.refreshToken,
   });
 };
 
@@ -45,7 +39,6 @@ const kakaoLogin = async (
   req: express.Request,
   res: express.Response
 ): Promise<void> => {
-  console.log(req.user);
   res.json(req.user);
 };
 
