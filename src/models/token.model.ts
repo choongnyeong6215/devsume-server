@@ -3,11 +3,6 @@ import mongoose from "mongoose";
 
 const refreshTokenSchema = new mongoose.Schema<RefreshToken>(
   {
-    userId: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     token: {
       type: String,
       required: true,
