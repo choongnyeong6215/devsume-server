@@ -26,7 +26,7 @@ const generateRefreshToken = async () => {
   return refreshToken;
 };
 
-const verfiyAccessToken = (
+const verifyAccessToken = (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -49,9 +49,9 @@ const verfiyAccessToken = (
     return next();
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({
-        message: "유효기간이 만료된 토큰입니다.",
-      });
+      console.log("유효기간이 만료된 토큰입니다.");
+
+      return refreshAccessToken(req, res, next);
     }
 
     return res.status(403).json({
@@ -122,7 +122,7 @@ const removeRefeshToken = async (
 export {
   generateAccessToken,
   generateRefreshToken,
-  verfiyAccessToken,
+  verifyAccessToken,
   refreshAccessToken,
   removeRefeshToken,
 };
