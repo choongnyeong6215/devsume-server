@@ -5,6 +5,5 @@ declare namespace NodeJS {
     JWT_SECRET_KEY: string;
     KAKAO_CLIENT_ID: string;
     KAKAO_CLIENT_SECRET: string;
-    JWT_SECRET_KEY: string;
   }
 }
