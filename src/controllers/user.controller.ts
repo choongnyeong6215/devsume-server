@@ -1,45 +1,69 @@
-import * as express from "express";
-import { registerUser } from "../services/user.service.ts";
+import { Request, Response, NextFunction } from "express";
+import * as authService from "../services/user.service.ts";
+import { LocalJoinDto } from "../dtos/local-auth.dto.ts";
+import * as authMiddleware from "../middleware/auth.middleware.ts";
 import { Token, User } from "../types/user.type.ts";
+import { PROVIDER } from "../constants/index.ts";
 
-const localJoin = async (
-  req: express.Request,
-  res: express.Response
+export const localJoin = async (
+  req: Request<{}, {}, LocalJoinDto>,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   const { email, password } = req.body;
 
   try {
-    await registerUser(email, password);
+    const user = await authService.registerUser(email, password);
 
-    res.status(201).json({
-      message: "회원가입 완료!",
-    });
+    res.status(201).json(user);
   } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
-      message: "Server Error Occured",
-    });
+    next(err);
   }
 };
 
-const localLogin = async (
-  req: express.Request,
-  res: express.Response
+export const localLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const user = req.user as User;
+
+  try {
+    const [accessToken, refreshToken] = await Promise.all([
+      authMiddleware.generateAccessToken(user),
+      authMiddleware.generateRefreshToken(PROVIDER.local, user.oauthId),
+    ]);
+
+    res.status(200).json({
+      email: user.email,
+      accessToken,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const kakaoLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   const user = req.user as User & Token;
 
-  res.json({
-    accessToken: user.accessToken,
-    refreshToken: user.refreshToken,
-  });
-};
+  try {
+    await authService.registerKakao(user.oauthId, user?.email);
 
-const kakaoLogin = async (
-  req: express.Request,
-  res: express.Response
-): Promise<void> => {
-  res.json(req.user);
-};
+    await authMiddleware.generateRefreshToken(
+      PROVIDER.kakao,
+      user.oauthId,
+      user.refreshToken
+    );
 
-export { localJoin, localLogin, kakaoLogin };
+    res.status(200).json({
+      email: user?.email,
+      accessToken: user.accessToken,
+    });
+  } catch (err) {
+    next(err);
+  }
+};

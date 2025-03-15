@@ -1,26 +1,32 @@
 import { User } from "./../types/user.type";
 import * as bcrypt from "bcrypt";
 import UserModel from "../models/user.model";
+import { PROVIDER } from "../constants";
+import { v4 as uuidv4 } from "uuid";
 
-const registerUser = async (email: string, password: string): Promise<User> => {
+export const registerUser = async (
+  email: string,
+  password: string
+): Promise<User> => {
   const existingUser = await UserModel.findOne({ email });
 
   if (existingUser) {
-    throw new Error("이미 존재하는 이메일입니다.");
+    throw new Error("이미 가입한 이메일입니다.");
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
 
   const newUser = new UserModel({
+    oauthId: uuidv4(),
     email,
     password: hashedPassword,
-    provider: "local",
+    provider: PROVIDER.local,
   });
 
   return newUser.save();
 };
 
-const validateUser = async (
+export const validateUser = async (
   email: string,
   password: string
 ): Promise<User | null> => {
@@ -33,10 +39,8 @@ const validateUser = async (
   return null;
 };
 
-const validateKakao = async (userId: string): Promise<User | null> => {
+export const validateKakao = async (userId: string): Promise<User | null> => {
   const user = await UserModel.findOne({ oauthId: userId });
-
-  console.log("user : ", user);
 
   if (user) {
     return user;
@@ -45,14 +49,15 @@ const validateKakao = async (userId: string): Promise<User | null> => {
   return null;
 };
 
-const registerKakao = async (userId: number, email?: string): Promise<User> => {
+export const registerKakao = async (
+  oauthId: string,
+  email?: string
+): Promise<User> => {
   const newUser = new UserModel({
-    oauthId: userId,
+    oauthId,
     email,
-    provider: "kakao",
+    provider: PROVIDER.kakao,
   });
 
   return newUser.save();
 };
-
-export { registerUser, validateUser, validateKakao, registerKakao };
