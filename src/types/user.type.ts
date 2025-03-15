@@ -1,10 +1,10 @@
 import { ObjectId } from "mongoose";
 
-type Provider = "local" | "kakao";
+export type Provider = "local" | "kakao";
 
 export interface User extends Document {
   _id: ObjectId;
-  oauthId: number | null;
+  oauthId: string;
   email: string;
   password?: string;
   provider: Provider;
