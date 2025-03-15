@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-kakao";
-import { validateKakao, registerKakao } from "../services/user.service";
+import * as authService from "../services/user.service";
 
 const kakaoStrategy = () => {
   passport.use(
@@ -19,7 +19,7 @@ const kakaoStrategy = () => {
             },
           } = profile;
 
-          const existingKakaoAccount = await validateKakao(userId);
+          const existingKakaoAccount = await authService.validateKakao(userId);
 
           if (existingKakaoAccount) {
             return done(null, false, {
@@ -27,13 +27,15 @@ const kakaoStrategy = () => {
             });
           }
 
-          await registerKakao(Number(userId), email);
-
-          const user = { accessToken, refreshToken, userId, email };
+          const user = {
+            oauthId: userId,
+            email,
+            accessToken,
+            refreshToken,
+          };
 
           return done(null, user);
         } catch (err) {
-          console.log(err);
           done(err);
         }
       }
