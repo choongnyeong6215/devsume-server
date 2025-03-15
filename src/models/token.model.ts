@@ -1,11 +1,13 @@
+import { User } from "./../types/user.type";
 import { RefreshToken } from "./../types/token.type";
 import mongoose from "mongoose";
 
 const refreshTokenSchema = new mongoose.Schema<RefreshToken>(
   {
-    userId: {
+    oauthId: {
       type: String,
       required: true,
+      ref: "User",
     },
     token: {
       type: String,
