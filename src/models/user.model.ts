@@ -4,7 +4,7 @@ import { User } from "../types/user.type";
 const userSchema = new mongoose.Schema<User>(
   {
     oauthId: {
-      type: Number || null,
+      type: String,
       unique: true,
     },
     email: {
@@ -32,6 +32,6 @@ const userSchema = new mongoose.Schema<User>(
   }
 );
 
-const UserModel = mongoose.connection.model<User>("User", userSchema);
+const UserModel = mongoose.model<User>("User", userSchema);
 
 export default UserModel;
