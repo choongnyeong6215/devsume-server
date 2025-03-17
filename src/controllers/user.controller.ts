@@ -34,6 +34,11 @@ export const localLogin = async (
       authMiddleware.generateRefreshToken(PROVIDER.local, user.oauthId),
     ]);
 
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 7 * 60 * 60 * 1000, // 7일
+    });
+
     res.status(200).json({
       email: user.email,
       accessToken,
