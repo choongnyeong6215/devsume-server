@@ -1,45 +1,24 @@
 import { ObjectId } from "mongoose";
 
-enum ResumeStatus {
-  TEMPORARY = "temporary",
-  COMPLETED = "completed",
-}
+export type PortfolioType = "url" | "pdf";
 
-enum Options {
-  CAREER = "career",
-  ACTTIVITY = "acttivity",
-  CERTIFICATION = "certification",
-  EDUCATION = "education",
-  TECHSTACK = "techStack",
-  PROJECT = "project",
-}
+export type ResumeStatus = "temporary" | "completed";
 
-enum LanguageKind {
-  ENGLLISH = "engllish",
-  JAPANESE = "japanese",
-  CHINESE = "chinese",
-}
+type LanguageType = "engllish" | "japanese" | "chinese";
 
-enum LanguageLevel {
-  DAILY = "daily",
-  BUSINESS = "business",
-  NATIVE = "native",
-}
+type LanguageLevel = "daily" | "business" | "native";
 
-enum EducationKind {
-  PRIVATE = "private",
-  HIGH = "high",
-  ASSOCIATE = "associate",
-  BACHELOR = "bachelor",
-  MASTER = "master",
-  DOCTOR = "doctor",
-}
+type EducationType =
+  | "private"
+  | "high"
+  | "associate"
+  | "bachelor"
+  | "master"
+  | "doctor";
 
-enum EducationStatus {
-  GRADUATION = "graduation",
-  ATTENDING = "attending",
-  COMPLETION = "completion",
-}
+type EducationStatus = "graduation" | "attending" | "completion";
+
+export interface Portfolio extends Record<PortfolioType, string> {}
 
 interface Career {
   name: string;
@@ -64,12 +43,12 @@ interface Certification {
 }
 
 interface Language {
-  kind: LanguageKind;
+  type: LanguageType;
   level: LanguageLevel;
 }
 
 interface Education {
-  kind: EducationKind;
+  kind: EducationType;
   organization: string;
   major: string;
   status: EducationStatus;
@@ -85,7 +64,7 @@ interface Project {
   detail: string;
 }
 
-interface Contents {
+interface OptionDetail {
   career: Career[];
   activity: Activity[];
   certification: Certification[];
@@ -102,11 +81,9 @@ export interface Resume extends Document {
   name: string;
   email: string;
   introduction: string;
-  urls?: string;
-  pdfs?: string;
+  portfolio?: Portfolio[];
   status: ResumeStatus;
-  options: Options;
-  contents: Contents;
+  options?: OptionDetail;
   createdAt: Date;
   updatedAt: Date;
   __v: number;
