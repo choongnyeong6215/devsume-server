@@ -65,6 +65,7 @@ interface Project {
 }
 
 export interface OptionDetail {
+  portfolio?: Portfolio[];
   career: Career[];
   activity: Activity[];
   certification: Certification[];
@@ -82,7 +83,6 @@ export interface Resume extends Document {
   name: string;
   email: string;
   introduction: string;
-  portfolio?: Portfolio[];
   status: ResumeStatus;
   options?: OptionDetail;
   createdAt: Date;

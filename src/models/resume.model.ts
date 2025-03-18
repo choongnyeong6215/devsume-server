@@ -28,22 +28,23 @@ const resumeSchema = new mongoose.Schema<Resume>(
       type: String,
       required: true,
     },
-    portfolio: [
-      {
-        type: {
-          type: String,
-          enum: ["url", "pdf"],
-        },
-        address: {
-          type: String,
-        },
-      },
-    ],
+
     status: {
       type: String,
       enum: ["temporary", "completed"],
     },
     options: {
+      portfolio: [
+        {
+          type: {
+            type: String,
+            enum: ["url", "pdf"],
+          },
+          address: {
+            type: String,
+          },
+        },
+      ],
       career: [
         {
           name: { type: String },
