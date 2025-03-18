@@ -24,6 +24,5 @@ router.get(
     passportMiddleware.passportAuthHandler(req, res, next, PROVIDER.kakao),
   authController.kakaoLogin
 );
-router.delete("/local/token");
 
 export default router;
