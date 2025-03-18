@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 
 const resumeSchema = new mongoose.Schema<Resume>(
   {
+    resumeId: {
+      type: String,
+      required: true,
+    },
     oauthId: {
       type: String,
       ref: "User",
