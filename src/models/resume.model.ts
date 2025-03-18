@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 
 const resumeSchema = new mongoose.Schema<Resume>(
   {
-    userId: {
-      type: mongoose.Schema.ObjectId,
+    oauthId: {
+      type: String,
       ref: "User",
       required: true,
     },

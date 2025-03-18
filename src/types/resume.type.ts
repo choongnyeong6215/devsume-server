@@ -76,7 +76,7 @@ export interface OptionDetail {
 
 export interface Resume extends Document {
   _id: ObjectId;
-  userId: ObjectId;
+  oauthId: String;
   profileImg: string;
   name: string;
   email: string;
