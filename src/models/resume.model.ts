@@ -24,14 +24,15 @@ const resumeSchema = new mongoose.Schema<Resume>(
       type: String,
       required: true,
     },
-    urls: [
+    portfolio: [
       {
-        type: String,
-      },
-    ],
-    pdfs: [
-      {
-        type: String,
+        type: {
+          type: String,
+          enum: ["url", "pdf"],
+        },
+        address: {
+          type: String,
+        },
       },
     ],
     status: {
@@ -39,130 +40,83 @@ const resumeSchema = new mongoose.Schema<Resume>(
       enum: ["temporary", "completed"],
     },
     options: {
-      type: String,
-      enum: [
-        "career",
-        "acttivity",
-        "certification",
-        "education",
-        "techStack",
-        "project",
-      ],
-      contents: {
-        career: [
-          {
-            name: {
-              type: String,
-            },
-            position: {
-              type: String,
-            },
-            part: {
-              type: String,
-            },
-            duration: {
-              type: String,
-            },
-            detail: {
-              type: String,
-            },
-          },
-        ],
-        activity: [
-          {
-            name: {
-              type: String,
-            },
-            organization: {
-              type: String,
-            },
-            duration: {
-              type: String,
-            },
-            detail: {
-              type: String,
-            },
-          },
-        ],
-        certification: {
-          name: {
-            type: String,
-          },
-          level: {
-            type: String,
-          },
-          organization: {
-            type: String,
-          },
-          duration: {
-            type: String,
-          },
+      career: [
+        {
+          name: { type: String },
+          position: { type: String },
+          part: { type: String },
+          duration: { type: String },
+          detail: { type: String },
         },
-        language: {
-          kind: {
+      ],
+      activity: [
+        {
+          name: { type: String },
+          organization: { type: String },
+          duration: { type: String },
+          detail: { type: String },
+        },
+      ],
+      certification: [
+        {
+          name: { type: String },
+          level: { type: String },
+          organization: { type: String },
+          duration: { type: String },
+        },
+      ],
+      language: [
+        {
+          type: {
             type: String,
-            enum: ["engilish", "japanese", "chinese"],
+            enum: ["english", "japanese", "chinese"],
           },
           level: {
             type: String,
             enum: ["daily", "business", "native"],
           },
         },
-        education: [
-          {
-            kind: {
-              type: String,
-              enum: [
-                "private",
-                "high",
-                "associate",
-                "bachelor",
-                "master",
-                "doctor",
-              ],
-            },
-            organization: {
-              type: String,
-            },
-            major: {
-              type: String,
-            },
-            status: {
-              type: String,
-              enum: ["graduation", "attending", "completion"],
-            },
-            duration: {
-              type: String,
-            },
+      ],
+      education: [
+        {
+          type: {
+            type: String,
+            enum: [
+              "private",
+              "high",
+              "associate",
+              "bachelor",
+              "master",
+              "doctor",
+            ],
           },
-        ],
-        techStack: [
-          {
-            type: [String],
+          organization: { type: String },
+          major: { type: String },
+          status: {
+            type: String,
+            enum: ["graduation", "attending", "completion"],
           },
-        ],
-        project: [
-          {
-            name: {
-              type: String,
-            },
-            organization: {
-              type: String,
-            },
-            duration: {
-              type: String,
-            },
-            detail: {
-              type: String,
-            },
-          },
-        ],
-      },
+          duration: { type: String },
+        },
+      ],
+      techStack: [
+        {
+          type: [String],
+        },
+      ],
+      project: [
+        {
+          name: { type: String },
+          organization: { type: String },
+          duration: { type: String },
+          detail: { type: String },
+        },
+      ],
     },
   },
   {
     timestamps: {
-      currentTime: () => new Date(new Date().getTime() + 9 * 60 * 60 * 1000), // KST
+      currentTime: () => new Date(new Date().getTime() + 9 * 60 * 60 * 1000),
     },
   }
 );
