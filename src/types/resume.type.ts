@@ -64,7 +64,7 @@ interface Project {
   detail: string;
 }
 
-interface OptionDetail {
+export interface OptionDetail {
   career: Career[];
   activity: Activity[];
   certification: Certification[];
