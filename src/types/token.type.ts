@@ -8,3 +8,11 @@ export interface RefreshToken extends Document {
   updatedAt: Date;
   __v: number;
 }
+
+export interface KakaoRefreshResponse {
+  access_token: string;
+  token_type: string;
+  refresh_token?: string;
+  refresh_token_expires_in?: number;
+  expires_in: number;
+}
