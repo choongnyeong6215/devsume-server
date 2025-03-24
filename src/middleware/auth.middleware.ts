@@ -72,7 +72,7 @@ export const validateAccessToken = (
 
     req.user = decoded;
 
-    next();
+    return next();
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
       res.status(401).json({
