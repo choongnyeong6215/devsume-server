@@ -1,23 +1,21 @@
-import { OptionDetail, Portfolio, ResumeStatus } from "../types/resume.type";
+import { OptionDetail, ResumeStatus } from "../types/resume.type";
 
 export interface ResumeInputDto {
-  data?: string; // form-data
+  oauthId: string;
   profileImg: string;
   name: string;
   email: string;
   introduction: string;
-  portfolio: Portfolio[];
   options?: OptionDetail;
   status: ResumeStatus;
 }
 
 export interface updateResumeInputDto {
-  data?: string; // form-data
+  oauthId: string;
   profileImg?: string;
   name?: string;
   email?: string;
   introduction?: string;
-  portfolio?: Portfolio[];
   options?: OptionDetail;
   status?: ResumeStatus;
 }
