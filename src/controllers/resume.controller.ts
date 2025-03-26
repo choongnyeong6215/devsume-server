@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import * as resumeService from "../services/resume.service.ts";
 import { ResumeInputDto, updateResumeInputDto } from "../dtos/resume.dto.ts";
 import { User } from "../types/user.type.ts";
@@ -8,19 +8,10 @@ export const createResume = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = req.user as User;
-  const resumeInput: ResumeInputDto = JSON.parse(req.body.data);
-
-  if (!req.file) {
-    throw new Error("프로필 이미지 업로드 에러.");
-  }
+  const resumeInput = req.body;
 
   try {
-    const newResume = await resumeService.createResume(
-      user.oauthId,
-      req.file.location,
-      resumeInput
-    );
+    const newResume = await resumeService.createResume(resumeInput);
 
     res.status(201).json(newResume);
   } catch (err) {
@@ -28,7 +19,7 @@ export const createResume = async (
   }
 };
 
-export const getResume = async (
+export const getResumeById = async (
   req: Request<{ id: string }>,
   res: Response,
   next: NextFunction
@@ -79,15 +70,10 @@ export const updateResume = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const resumeInput = JSON.parse(req.body.data);
-
-  if (!req.file) {
-    throw new Error("프로필 이미지 업로드 에러.");
-  }
+  const updateResumeInput = req.body;
 
   try {
-    await resumeService.updateResume(id, req.file.location, resumeInput);
-
+    await resumeService.updateResume(id, updateResumeInput);
     res.status(200).json({
       message: "이력서가 수정되었습니다.",
     });
