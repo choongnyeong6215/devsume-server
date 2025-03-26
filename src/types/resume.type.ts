@@ -18,7 +18,10 @@ type EducationType =
 
 type EducationStatus = "graduation" | "attending" | "completion";
 
-export interface Portfolio extends Record<PortfolioType, string> {}
+export interface Portfolio {
+  type: PortfolioType;
+  address: string;
+}
 
 interface Career {
   name: string;
