@@ -9,9 +9,14 @@ import * as errorMiddleware from "./middleware/error.middleware.ts";
 import passport from "passport";
 import localStrategy from "./strategies/local.strategy.ts";
 import kakaoStrategy from "./strategies/kakao.strategy.ts";
+import cors from "cors";
+import { corsOptions } from "./config/cors.ts";
 
 const app = express();
 const PORT = process.env.PORT;
+
+// cors
+app.use(cors(corsOptions));
 
 // db connection
 connectDb();
