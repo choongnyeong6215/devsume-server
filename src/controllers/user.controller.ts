@@ -4,7 +4,6 @@ import { LocalJoinDto } from "../dtos/local-auth.dto.ts";
 import * as authMiddleware from "../middleware/auth.middleware.ts";
 import { Token, User } from "../types/user.type.ts";
 import { PROVIDER } from "../constants/index.ts";
-import { sendCookie } from "../utils/cookie.util.ts";
 
 export const localJoin = async (
   req: Request<{}, {}, LocalJoinDto>,
@@ -35,12 +34,15 @@ export const localLogin = async (
       authMiddleware.generateRefreshToken(PROVIDER.local, user.oauthId),
     ]);
 
-    sendCookie(res, refreshToken);
-
-    res.status(200).json({
-      email: user.email,
-      accessToken,
-    });
+    res
+      .status(200)
+      .cookie("refresh-token", refreshToken, {
+        httpOnly: true,
+      })
+      .json({
+        email: user.email,
+        accessToken,
+      });
   } catch (err) {
     next(err);
   }
@@ -62,12 +64,15 @@ export const kakaoLogin = async (
       user.refreshToken
     );
 
-    sendCookie(res, user.refreshToken);
-
-    res.status(200).json({
-      email: user?.email,
-      accessToken: user.accessToken,
-    });
+    res
+      .status(200)
+      .cookie("refresh-token", user.refreshToken, {
+        httpOnly: true,
+      })
+      .json({
+        email: user?.email,
+        accessToken: user.accessToken,
+      });
   } catch (err) {
     next(err);
   }
