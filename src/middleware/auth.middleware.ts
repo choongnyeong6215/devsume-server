@@ -86,22 +86,14 @@ export const validateAccessToken = (
   }
 };
 
-export const reIssueAccessToken = async (
-  req: Request<{}, {}, { oauthId: string }>,
+export const refreshAccessToken = async (
+  req: Request,
   res: Response
-) => {
-  const { oauthId } = req.body;
-
-  if (!oauthId) {
-    return res.status(401).json({
-      message: "사용자 id가 존재하지 않습니다.",
-    });
-  }
-
-  const refreshToken = await getRefreshToken(oauthId);
+): Promise<void> => {
+  const refreshToken = req.cookies["refresh-token"];
 
   if (!refreshToken) {
-    return res.status(401).json({
+    res.status(401).json({
       message: "리프레시 토큰이 존재하지 않습니다.",
     });
   }
@@ -112,29 +104,43 @@ export const reIssueAccessToken = async (
       process.env.JWT_SECRET_KEY
     ) as jwt.JwtPayload;
 
-    if (!decoded.oauthId || !decoded.email) {
-      return res.status(401).json({
+    if (!decoded.oauthId) {
+      res.status(401).json({
         message: "유효하지 않은 리프레시 토큰입니다.",
       });
     }
 
     const payload = {
       oauthId: decoded.oauthId,
-      email: decoded.email,
     };
 
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-      expiresIn: "10m",
+    const newAccessToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+      expiresIn: "30m",
     });
 
-    return res.status(200).json({
-      accessToken,
+    res.status(200).json({
+      accessToken: newAccessToken,
     });
   } catch (err) {
-    await removeRefreshToken(oauthId);
+    const decoded = jwt.decode(refreshToken) as jwt.JwtPayload;
 
-    return res.status(401).json({
-      message: "유효하지 않은 리프레시 토큰입니다.",
+    // 리프레시 토큰 삭제
+    if (decoded?.oauthId) await removeRefreshToken(decoded.oauthId);
+
+    if (err instanceof jwt.TokenExpiredError) {
+      res.status(401).json({
+        message: "유효기간이 만료된 토큰입니다.",
+      });
+    }
+
+    if (err instanceof jwt.JsonWebTokenError) {
+      res.status(401).json({
+        message: "유효하지 않은 리프레시 토큰입니다.",
+      });
+    }
+
+    res.status(500).json({
+      message: "서버 오류 발생",
     });
   }
 };
