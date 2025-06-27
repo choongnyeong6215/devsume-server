@@ -11,12 +11,16 @@ import localStrategy from "./strategies/local.strategy.ts";
 import kakaoStrategy from "./strategies/kakao.strategy.ts";
 import cors from "cors";
 import { corsOptions } from "./config/cors.ts";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT;
 
 // cors
 app.use(cors(corsOptions));
+
+// cookie
+app.use(cookieParser());
 
 // db connection
 connectDb();
