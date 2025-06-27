@@ -13,9 +13,17 @@ export const localJoin = async (
   const { email, password } = req.body;
 
   try {
-    const user = await authService.registerUser(email, password);
+    const {
+      oauthId,
+      email: joinSuccessEmail,
+      provider,
+    } = await authService.registerUser(email, password);
 
-    res.status(201).json(user);
+    res.status(201).json({
+      oauthId,
+      email: joinSuccessEmail,
+      provider,
+    });
   } catch (err) {
     next(err);
   }
